@@ -13,6 +13,7 @@ use util;
 const URL: &'static str = "https://infolific.com/pets/freshwater-aquariums/plant-database/";
 const WORKERS: usize = 4;
 
+#[derive(Debug)]
 pub struct Plant {
     name: String,
     synonims: String,
@@ -44,23 +45,40 @@ pub fn scrape() {
 
     for home_info in home_infos {
         let tx = tx.clone();
-        let link = home_info.link.clone();
 
         pool.execute(move || {
-            let body = reqwest::get(&link)
+            let body = reqwest::get(&home_info.link)
                 .unwrap()
                 .text()
                 .unwrap();
 
             let individual_info = parse_individual::parse(&body);
 
-            tx.send(individual_info).unwrap();
+            let plant_info = Plant {
+                name: home_info.name,
+                synonims: individual_info.synonims,
+                difficulty: home_info.difficulty,
+                lighting: home_info.lighting,
+                tank_placement: home_info.tank_placement,
+                plant_structure: home_info.plant_structure,
+                family: home_info.family,
+                genus: home_info.genus,
+                size: home_info.size,
+                growth_rate: home_info.growth_rate,
+                region: home_info.region,
+                location: home_info.location,
+                hardiness: individual_info.hardiness,
+                can_be_grown_emersed: individual_info.can_be_grown_emersed,
+                description: individual_info.description,
+            };
+
+            tx.send(plant_info).unwrap();
         });
     }
+
+    drop(tx);
 
     for result in rx {
         println!("{:#?}", result);
     }
-
-    pool.join();
 }
