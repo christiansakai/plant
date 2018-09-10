@@ -1,7 +1,12 @@
 mod infolific;
+mod aquaticcommunity;
 mod util;
 
 fn main() {
-    infolific::scrape();
+    // infolific::scrape();
+
+    aquaticcommunity::scrape();
+
+
 }
 

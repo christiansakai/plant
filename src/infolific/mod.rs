@@ -1,14 +1,12 @@
 extern crate reqwest;
 extern crate threadpool;
 
-mod parse_home;
-mod parse_individual;
+mod home;
+mod individual;
 
 use std::sync::mpsc::channel;
-
 use self::threadpool::ThreadPool;
 
-use util;
 
 const URL: &'static str = "https://infolific.com/pets/freshwater-aquariums/plant-database/";
 const WORKERS: usize = 4;
@@ -41,7 +39,7 @@ pub fn scrape() {
         .text()
         .unwrap();
 
-    let home_infos = parse_home::parse(&body);
+    let home_infos = home::parse(&body);
 
     for home_info in home_infos {
         let tx = tx.clone();
@@ -52,7 +50,7 @@ pub fn scrape() {
                 .text()
                 .unwrap();
 
-            let individual_info = parse_individual::parse(&body);
+            let individual_info = individual::parse(&body);
 
             let plant_info = Plant {
                 name: home_info.name,

@@ -1,6 +1,7 @@
 extern crate scraper;
 
 use self::scraper::{Html, Selector, ElementRef};
+use ::util;
 
 #[derive(Debug)]
 pub struct IndividualInfo {
@@ -129,17 +130,17 @@ fn clean_and_parse_property_info(property_info: String) -> PropertyInfo {
         let (key, value): (String, String) = get_key_value(property);
 
         match key.as_ref() {
-            "Synonims" => property_info.synonims = Some(value),
-            "Hardiness" => property_info.hardiness = Some(value),
-            "Light Needs" => property_info.light_needs = Some(value),
-            "Plant Structure" => property_info.plant_structure = Some(value),
-            "Family" => property_info.family = Some(value),
-            "Genus" => property_info.genus = Some(value),
-            "Region" => property_info.region = Some(value),
-            "Location" => property_info.location = Some(value),
-            "Size" => property_info.size = Some(value),
-            "Growth Rate" => property_info.growth_rate = Some(value),
-            "Can Be Grown Emersed" => property_info.can_be_grown_emersed = Some(value),
+            "synonims" => property_info.synonims = Some(value),
+            "hardiness" => property_info.hardiness = Some(value),
+            "light needs" => property_info.light_needs = Some(value),
+            "plant structure" => property_info.plant_structure = Some(value),
+            "family" => property_info.family = Some(value),
+            "genus" => property_info.genus = Some(value),
+            "region" => property_info.region = Some(value),
+            "location" => property_info.location = Some(value),
+            "size" => property_info.size = Some(value),
+            "growth rate" => property_info.growth_rate = Some(value),
+            "can be grown emersed" => property_info.can_be_grown_emersed = Some(value),
             &_ => (),
         }
     }
@@ -148,9 +149,7 @@ fn clean_and_parse_property_info(property_info: String) -> PropertyInfo {
 }
 
 fn get_key_value(property: &str) -> (String, String) {
-    let property = property
-        .replace("<b>", "")
-        .replace("</b>", "");
+    let property = util::clean_string(property.to_string());
 
     let key_value: Vec<&str> = property
         .split(":")

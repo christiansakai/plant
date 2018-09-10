@@ -8,3 +8,10 @@ Several sites to scrape:
 - https://en.aqua-fish.net/plants/
 - https://www.flowgrow.de/db/aquaticplants
 - https://tropica.com/en/plants
+
+Features:
+- Database
+  - With similarities
+- Calculator
+  - Slope
+
